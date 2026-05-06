@@ -534,7 +534,7 @@ async function loadData() {
       ga4Query({ dateRanges: [dateRange()], dimensions: [{name:'sessionDefaultChannelGroup'}], metrics: [{name:'sessions'}], orderBys: [{metric:{metricName:'sessions'}, desc:true}] }),
       ga4Query({ dateRanges: [dateRange()], dimensions: [{name:'pagePath'}], metrics: [{name:'screenPageViews'},{name:'averageSessionDuration'},{name:'bounceRate'},{name:'scrolledUsers'}], orderBys: [{metric:{metricName:'screenPageViews'}, desc:true}], limit: 8 }),
       ga4Query({ dateRanges: [dateRange()], dimensions: [{name:'deviceCategory'}], metrics: [{name:'sessions'}] }),
-      ga4Query({ dateRanges: [dateRange()], dimensions: [{name:'country'}], metrics: [{name:'sessions'}], orderBys: [{metric:{metricName:'sessions'}, desc:true}], limit: 5 }),
+      ga4Query({ dateRanges: [dateRange()], dimensions: [{name:'city'},{name:'country'}], metrics: [{name:'sessions'}], orderBys: [{metric:{metricName:'sessions'}, desc:true}], limit: 8 }),
       ga4Query({ dateRanges: [dateRange()], dimensions: [{name:'linkUrl'}], metrics: [{name:'eventCount'}], dimensionFilter: {filter:{fieldName:'eventName',stringFilter:{value:'click'}}}, orderBys: [{metric:{metricName:'eventCount'}, desc:true}], limit: 10 }),
       ga4Query({ dateRanges: [dateRange()], dimensions: [{name:'newVsReturning'}], metrics: [{name:'sessions'}] })
     ]);
@@ -658,10 +658,12 @@ function renderLocations(locations) {
   const rows = locations.rows || [];
   const max = rows.length ? parseInt(rows[0].metricValues[0].value) : 1;
   document.getElementById('locationsBar').innerHTML = rows.map((r, i) => {
-    const country = r.dimensionValues[0].value;
+    const city = r.dimensionValues[0].value;
+    const country = r.dimensionValues[1].value;
+    const label = city === '(not set)' ? country : city + ', ' + country;
     const val = parseInt(r.metricValues[0].value);
     const pct = Math.round(val / max * 100);
-    return `<div class="bar-wrap"><div class="bar-label">${country}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${COLORS[i]};"></div></div><div class="bar-val">${val}</div></div>`;
+    return `<div class="bar-wrap"><div class="bar-label" style="width:140px;font-size:12px;" title="${label}">${label.length > 18 ? label.substring(0,18)+'...' : label}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${COLORS[i]};"></div></div><div class="bar-val">${val}</div></div>`;
   }).join('');
 }
 
