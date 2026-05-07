@@ -347,7 +347,7 @@
     <div class="error-banner" id="errorBanner"></div>
 
     <div class="date-tabs">
-      <button class="date-tab" onclick="setRange(1, this)">Today</button>
+      <button class="date-tab" onclick="setRange(1, this)">Yesterday</button>
       <button class="date-tab active" onclick="setRange(7, this)">7 days</button>
       <button class="date-tab" onclick="setRange(30, this)">30 days</button>
       <button class="date-tab" onclick="setRange(90, this)">90 days</button>
@@ -516,7 +516,7 @@ async function ga4Query(body) {
 }
 
 function dateRange() {
-  if (currentRange === 1) return { startDate: 'today', endDate: 'today' };
+  if (currentRange === 1) return { startDate: 'yesterday', endDate: 'yesterday' };
   return { startDate: `${currentRange}daysAgo`, endDate: 'today' };
 }
 
